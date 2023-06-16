@@ -1,0 +1,19 @@
+.flex-container{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .individual-card{
+    margin-left: 5%;
+    margin-top: 3%;
+  }
+  
+  .individual-card-leftmost{
+    margin-top: 3%;
+  }
+
+  .h5{
+    text-align: center;
+  }
