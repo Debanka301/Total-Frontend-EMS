@@ -9,6 +9,7 @@ import axios from 'axios';
 const AdminDashboard = () =>{
 
     //const location= useLocation();
+    const navigate= useNavigate();
 
     const [name, setName]= useState('');
     const [image1, setImage1]= useState('');
@@ -38,7 +39,14 @@ const AdminDashboard = () =>{
 
     return(
         <div>
+            <br />
             <h5 className='h5'>Admin Dashboard</h5>
+            <div className='logout'>
+            <Button variant='danger' onClick={()=>{
+              localStorage.removeItem('token');
+              navigate("/");
+            }}>Logout</Button>
+            </div>
             <br />
             <div className='flex-container'>
         <div className='individual-card-leftmost'>

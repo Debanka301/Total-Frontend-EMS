@@ -21,7 +21,6 @@ import UserProfile from './components/UserProfile';
 function App() {
   return (
     <div>
-        <HeaderComponent />
           <Router>
             <Routes>
               <Route exact path='/' Component={LoginComponent} />

@@ -5,10 +5,12 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import '../Styles/UserDashboard.css';
 import axios from 'axios';
+import HeaderComponent from './HeaderComponent';
 
 const UserDashboard = () =>{
 
     const location= useLocation();
+    const navigate = useNavigate();
 
     const [name, setName]= useState('');
     const [image1, setImage1]= useState('');
@@ -17,6 +19,14 @@ const UserDashboard = () =>{
 
     const id= location.state.id;
     console.log(id);
+
+    // useEffect(() =>{
+    //   const token= localStorage.getItem('token');
+    //   console.log(token);
+    //   if(!token){
+    //     navigate("/")
+    //   }
+    // },[])
 
     useEffect(() => {
 
@@ -57,7 +67,15 @@ const UserDashboard = () =>{
 
     return(
         <div>
+
+            <br />
             <h4 className='h5'>{name}'s Dashboard</h4>
+            <div className='logout'>
+            <Button variant='danger' onClick={()=>{
+              localStorage.removeItem('token');
+              navigate("/");
+            }}>Logout</Button>
+            </div>
 
             <br />
 
