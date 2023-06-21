@@ -7,6 +7,8 @@ const UserAddLeavesDetails = ()=>{
     const [endDate, setEndDate] = useState('')
     const [reason, setReason] = useState('')
     //const [id, setId] = useState('')
+    const [errorMessage, setErrorMessage]= useState('')
+
 
     const {id}= useParams();
     console.log(id);
@@ -19,15 +21,34 @@ const UserAddLeavesDetails = ()=>{
 
         const leaves= {startDate, endDate, reason, id}
 
-        EmployeeService.saveLeaves(leaves).then((response) =>{
+        console.log(leaves)
 
-            console.log(response.data);
-            navigate("/user-addLeaves/"+id);
+        if(startDate.trim() === ''){
+            setErrorMessage("Start date field cannot be blank")
+        }
+        else if(endDate.trim() === ''){
+            setErrorMessage("End Date field cannot be blank")
+        }
+        else if(reason.trim()===''){
+            setErrorMessage("Reason field cannot be blank")
+        }
+        else{
+            EmployeeService.saveLeaves(leaves).then((response) =>{
 
-        }).catch(error => {
-            console.log(error)
-        })
+                console.log(response.data);
+                alert("Your leave details are added!!")
+                setEndDate('');
+                setErrorMessage('')
+                setReason('')
+                setStartDate('')
+                navigate("/user-addLeaves/"+id);
+    
+            }).catch(error => {
+                console.log(error)
+            })    
 
+        }
+        
     }
 
     const title = () => {
@@ -67,7 +88,7 @@ const UserAddLeavesDetails = ()=>{
                                         name = "startDate"
                                         className = "form-control"
                                         value = {startDate}
-                                        onChange = {(e) => setStartDate(e.target.value)}
+                                        onChange = {(e) => {setStartDate(e.target.value);setErrorMessage('');}}
                                     >
                                     </input>
                                 </div>
@@ -79,7 +100,7 @@ const UserAddLeavesDetails = ()=>{
                                         name = "endDate"
                                         className = "form-control"
                                         value = {endDate}
-                                        onChange = {(e) => setEndDate(e.target.value)}
+                                        onChange = {(e) => {setEndDate(e.target.value); setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
@@ -91,11 +112,11 @@ const UserAddLeavesDetails = ()=>{
                                         name = "reason"
                                         className = "form-control"
                                         value = {reason}
-                                        onChange = {(e) => setReason(e.target.value)}
+                                        onChange = {(e) => {setReason(e.target.value); setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
-
+                                {errorMessage && <p style={{color:"red"}}>{errorMessage}</p>}
                                 <button className = "btn btn-success" onClick = {(e) => saveLeaves(e)} >Submit </button>
                                 <Link to={`/user-addLeaves/${id}`} className="btn btn-danger" style = {{marginLeft:"10px"}}> Cancel </Link>
                             </form>

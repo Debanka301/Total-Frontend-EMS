@@ -9,6 +9,7 @@ const AddEmployeeComponent = () => {
     const [address, setAddress] = useState('')
     const [age, setAge] = useState('')
     const [role, setRole] = useState('')
+    const [errorMessage, setErrorMessage]= useState('')
 
     const history = useNavigate();
     const {id} = useParams();
@@ -19,22 +20,54 @@ const AddEmployeeComponent = () => {
         const employee = {name, password, address, age, role}
 
         if(id){
-            EmployeeService.updateEmployee(id, employee).then((response) => {
-                console.log(response.data)
-            }).catch(error => {
-                console.log(error)
-            })
+            if(name.trim()===''){
+                setErrorMessage("Name Field cannot be blank");
+            }
+            else if(password.trim()===''){
+                setErrorMessage("Password Field cannot be blank");
+            }
+            else if(address.trim()===''){
+                setErrorMessage("Address Field cannot be blank");
+            }
+            else if(role.trim()===''){
+                setErrorMessage("Role Field cannot be blank");
+            }
+            else{
+                EmployeeService.updateEmployee(id, employee).then((response) => {
+                    console.log(response.data)
+                    alert("Your account is updated successfully!!")
+                    setErrorMessage('')
+                    history('/employees')
+                }).catch(error => {
+                    console.log(error)
+                })
+            }
 
         }else{
-            EmployeeService.createEmployee(employee).then((response) =>{
+            if(name.trim()===''){
+                setErrorMessage("Name Field cannot be blank");
+            }
+            else if(password.trim()===''){
+                setErrorMessage("Password Field cannot be blank");
+            }
+            else if(address.trim()===''){
+                setErrorMessage("Address Field cannot be blank");
+            }
+            else if(role.trim()===''){
+                setErrorMessage("Role Field cannot be blank");
+            }
+            else{
+                EmployeeService.createEmployee(employee).then((response) =>{
 
-                console.log(response.data)
-    
-                history.push('/employees');
-    
-            }).catch(error => {
-                console.log(error)
-            })
+                    console.log(response.data)
+                    alert("New Employee added!")
+                    setErrorMessage('')
+                    history('/employees')
+        
+                }).catch(error => {
+                    console.log(error)
+                })
+            }
         }
         
     }
@@ -80,7 +113,7 @@ const AddEmployeeComponent = () => {
                                         name = "name"
                                         className = "form-control"
                                         value = {name}
-                                        onChange = {(e) => setName(e.target.value)}
+                                        onChange = {(e) => {setName(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
@@ -93,7 +126,7 @@ const AddEmployeeComponent = () => {
                                         name = "password"
                                         className = "form-control"
                                         value = {password}
-                                        onChange = {(e) => setPassword(e.target.value)}
+                                        onChange = {(e) => {setName(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
@@ -106,7 +139,7 @@ const AddEmployeeComponent = () => {
                                         name = "address"
                                         className = "form-control"
                                         value = {address}
-                                        onChange = {(e) => setAddress(e.target.value)}
+                                        onChange = {(e) => {setAddress(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
@@ -119,7 +152,7 @@ const AddEmployeeComponent = () => {
                                         name = "age"
                                         className = "form-control"
                                         value = {age}
-                                        onChange = {(e) => setAge(e.target.value)}
+                                        onChange = {(e) => {setAge(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
@@ -132,11 +165,11 @@ const AddEmployeeComponent = () => {
                                         name = "role"
                                         className = "form-control"
                                         value = {role}
-                                        onChange = {(e) => setRole(e.target.value)}
+                                        onChange = {(e) => {setRole(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
-
+                                {errorMessage && <p style={{color:"red"}}>{errorMessage}</p>}
                                 <button className = "btn btn-success" onClick = {(e) => saveOrUpdateEmployee(e)} >Submit </button>
                                 <Link to="/employees" className="btn btn-danger" style = {{marginLeft:"10px"}}> Cancel </Link>
                             </form>

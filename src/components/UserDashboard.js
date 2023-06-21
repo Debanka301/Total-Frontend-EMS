@@ -73,6 +73,7 @@ const UserDashboard = () =>{
             <div className='logout'>
             <Button variant='danger' onClick={()=>{
               localStorage.removeItem('token');
+              alert("Logged out Successfully!!")
               navigate("/");
             }}>Logout</Button>
             </div>

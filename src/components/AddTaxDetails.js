@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {Link, useNavigate, useParams } from 'react-router-dom';
 import EmployeeService from '../Services/EmployeeService';
+import TaxValidation from '../Validators/TaxValidation';
 
 const AddTaxDetails = () =>{
 
@@ -8,29 +9,43 @@ const AddTaxDetails = () =>{
     const [salary, setSalary] = useState('')
 
     const {id} = useParams();
+    const navigate= useNavigate();
+
+    const [errorMesage, setErrorMessage] = useState('')
 
     const saveOrUpdateTax = (t) =>{
         t.preventDefault();
 
         const taxInput= {empId, salary}
 
-        EmployeeService.saveTax(taxInput).then((response) =>{
+        console.log(taxInput);
 
-            console.log(response.data);
+        if(empId.trim() === ''){
+            setErrorMessage("Employee Id field cannot be blank!")
+        }
+        else if(salary.trim() === ''){
+            setErrorMessage("Salary field cannot be blank!")
+        }
+        else{
+            EmployeeService.saveTax(taxInput).then((response) =>{
 
-        }).catch(error => {
-            console.log(error)
-        })
+                console.log(response.data);
+                alert("Tax details added!!")
+                setEmpId("");
+                setSalary("")
+                setErrorMessage("")
+                navigate('/tax-list')
+    
+    
+            }).catch(error => {
+                console.log(error)
+            })
 
+        }
     }
 
     const title = () => {
-
-        if(id){
-            return <h2 className = "text-center">Update Employee</h2>
-        }else{
-            return <h2 className = "text-center">Add Employee</h2>
-        }
+            return <h2 className = "text-center">Add Tax Details</h2>
     }
 
     return (
@@ -52,7 +67,7 @@ const AddTaxDetails = () =>{
                                         name = "empId"
                                         className = "form-control"
                                         value = {empId}
-                                        onChange = {(e) => setEmpId(e.target.value)}
+                                        onChange = {(e) => {setEmpId(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
@@ -65,11 +80,11 @@ const AddTaxDetails = () =>{
                                         name = "salary"
                                         className = "form-control"
                                         value = {salary}
-                                        onChange = {(e) => setSalary(e.target.value)}
+                                        onChange = {(e) => {setSalary(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
-
+                                {errorMesage && <p style={{color:"red"}}>{errorMesage}</p>}
                                 <button className = "btn btn-success" onClick = {(e) => saveOrUpdateTax(e)} >Submit </button>
                                 <Link to="/tax-list" className="btn btn-danger" style = {{marginLeft:"10px"}}> Cancel </Link>
                             </form>

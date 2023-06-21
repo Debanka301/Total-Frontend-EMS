@@ -8,6 +8,7 @@ const AddEditUser = () =>{
     const [address, setAddress] = useState('')
     const [age, setAge] = useState('')
     const [role, setRole] = useState('')
+    const [errorMessage, setErrorMessage]= useState('')
 
     const history = useNavigate();
     const {id} = useParams();
@@ -16,25 +17,45 @@ const AddEditUser = () =>{
         e.preventDefault();
 
         const employee = {name, password, address, age, role}
+        console.log(employee)
 
         if(id){
-            EmployeeService.updateEmployee(id, employee).then((response) => {
-                console.log(response.data)
-            }).catch(error => {
-                console.log(error)
-            })
+            if(name.trim()===''){
+                setErrorMessage("Name Field cannot be blank");
+            }
+            else if(password.trim()===''){
+                setErrorMessage("Password Field cannot be blank");
+            }
+            else if(address.trim()===''){
+                setErrorMessage("Address Field cannot be blank");
+            }
+            else if(role.trim()===''){
+                setErrorMessage("Role Field cannot be blank");
+            }
+            else{
+                EmployeeService.updateEmployee(id, employee).then((response) => {
+                    console.log(response.data)
+                    alert("Your account is updated successfully!!")
+                    setErrorMessage('');
+                    history('/user-profile/'+id)
+                }).catch(error => {
+                    console.log(error)
+                })
 
-        }else{
-            EmployeeService.createEmployee(employee).then((response) =>{
+            }
 
-                console.log(response.data)
-    
-                history.push('/employees');
-    
-            }).catch(error => {
-                console.log(error)
-            })
         }
+        //else{
+        //     EmployeeService.createEmployee(employee).then((response) =>{
+
+        //         console.log(response.data)
+    
+        //         history('/employees');
+    
+        //     }).catch(error => {
+        //         console.log(error)
+        //     })
+        // }
         
     }
 
@@ -79,7 +100,7 @@ const AddEditUser = () =>{
                                         name = "name"
                                         className = "form-control"
                                         value = {name}
-                                        onChange = {(e) => setName(e.target.value)}
+                                        onChange = {(e) => {setName(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
@@ -92,7 +113,7 @@ const AddEditUser = () =>{
                                         name = "password"
                                         className = "form-control"
                                         value = {password}
-                                        onChange = {(e) => setPassword(e.target.value)}
+                                        onChange = {(e) => {setPassword(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
@@ -105,7 +126,7 @@ const AddEditUser = () =>{
                                         name = "address"
                                         className = "form-control"
                                         value = {address}
-                                        onChange = {(e) => setAddress(e.target.value)}
+                                        onChange = {(e) => {setAddress(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
@@ -118,12 +139,12 @@ const AddEditUser = () =>{
                                         name = "age"
                                         className = "form-control"
                                         value = {age}
-                                        onChange = {(e) => setAge(e.target.value)}
+                                        onChange = {(e) => {setAge(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
                                 </div>
 
-                                <div className = "form-group mb-2">
+                                {/* <div className = "form-group mb-2">
                                     <label className = "form-label"> Role:</label>
                                     <input
                                         type = "text"
@@ -131,11 +152,11 @@ const AddEditUser = () =>{
                                         name = "role"
                                         className = "form-control"
                                         value = {role}
-                                        onChange = {(e) => setRole(e.target.value)}
+                                        onChange = {(e) => {set(e.target.value);setErrorMessage('')}}
                                     >
                                     </input>
-                                </div>
-
+                                </div> */}
+                                {errorMessage && <p style={{color:"red"}}>{errorMessage}</p>}
                                 <button className = "btn btn-success" onClick = {(e) => saveOrUpdateEmployee(e)} >Submit </button>
                                 <Link to={`/user-profile/${id}`} className="btn btn-danger" style = {{marginLeft:"10px"}}> Cancel </Link>
                             </form>

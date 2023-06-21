@@ -20,6 +20,7 @@ const logInHandler =(l)=>{
     EmployeeService.login(logInDTO).then((response)=>{
         console.log(response.data);
         localStorage.setItem("token",response.data.token);
+        alert("Successfull Login!!")
 
         if(response.data.employee.role === 'User'){
             goToUserDashboard(response.data.employee.id);
@@ -29,6 +30,7 @@ const logInHandler =(l)=>{
         }
         
     }).catch(error => {
+        alert("Oh!! Invalid credentials!")
         console.log(error)
     })
 }
